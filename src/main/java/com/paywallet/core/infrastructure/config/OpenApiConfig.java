@@ -19,7 +19,8 @@ public class OpenApiConfig {
                         .title("PayWallet API")
                         .version("1.0")
                         .description("Production-grade Digital Wallet System"))
-                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+                // .addSecurityItem(new SecurityRequirement().addList(securitySchemeName)) //
+                // Removed global to allow public routes
                 .components(new Components()
                         .addSecuritySchemes(securitySchemeName,
                                 new SecurityScheme()
