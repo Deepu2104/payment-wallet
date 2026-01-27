@@ -6,6 +6,7 @@ import com.paywallet.core.domain.model.User;
 import com.paywallet.core.presentation.dto.TransferRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/transactions")
 @RequiredArgsConstructor
 @Tag(name = "Transactions", description = "Endpoints for initiating value transfers")
+@SecurityRequirement(name = "bearerAuth")
 public class TransferController {
 
     private final TransferService transferService;
