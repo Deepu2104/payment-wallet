@@ -7,6 +7,7 @@ import com.paywallet.core.presentation.dto.LedgerEntryResponse;
 import com.paywallet.core.presentation.dto.WalletResponse;
 import lombok.RequiredArgsConstructor;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +20,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/wallet")
 @RequiredArgsConstructor
 @Tag(name = "Wallet", description = "Endpoints for balance, depositing money, and transaction history")
+@SecurityRequirement(name = "bearerAuth")
 public class WalletController {
 
     private final WalletService walletService;
