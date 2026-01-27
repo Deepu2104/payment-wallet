@@ -8,6 +8,7 @@ import com.paywallet.core.infrastructure.security.JwtService;
 import com.paywallet.core.presentation.dto.AuthResponse;
 import com.paywallet.core.presentation.dto.LoginRequest;
 import com.paywallet.core.presentation.dto.RegisterRequest;
+import com.paywallet.core.domain.exception.DuplicateResourceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,7 +36,7 @@ public class AuthService {
         @Transactional
         public AuthResponse register(RegisterRequest request) {
                 if (userRepository.existsByEmail(request.getEmail())) {
-                        throw new RuntimeException("Email already in use");
+                        throw new DuplicateResourceException("Email already in use", "EMAIL_EXISTS");
                 }
 
                 User user = User.builder()

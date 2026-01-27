@@ -34,6 +34,7 @@
 /Users/deepaksingh/Desktop/working_projects/Payment-wallet/src/main/java/com/paywallet/core/presentation/dto/WalletResponse.java
 /Users/deepaksingh/Desktop/working_projects/Payment-wallet/src/main/java/com/paywallet/core/application/service/AuthService.java
 /Users/deepaksingh/Desktop/working_projects/Payment-wallet/src/main/java/com/paywallet/core/presentation/dto/RegisterRequest.java
+/Users/deepaksingh/Desktop/working_projects/Payment-wallet/src/main/java/com/paywallet/core/domain/exception/DuplicateResourceException.java
 /Users/deepaksingh/Desktop/working_projects/Payment-wallet/src/main/java/com/paywallet/core/presentation/controller/RootController.java
 /Users/deepaksingh/Desktop/working_projects/Payment-wallet/src/main/java/com/paywallet/core/infrastructure/security/JwtAuthenticationFilter.java
 /Users/deepaksingh/Desktop/working_projects/Payment-wallet/src/main/java/com/paywallet/core/infrastructure/messaging/FraudDetectionConsumer.java

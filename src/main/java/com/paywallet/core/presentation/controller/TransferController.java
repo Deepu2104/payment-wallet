@@ -29,7 +29,8 @@ public class TransferController {
     private UUID getUserId(UserDetails userDetails) {
         return userRepository.findByEmail(userDetails.getUsername())
                 .map(User::getId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new com.paywallet.core.domain.exception.ResourceNotFoundException("User not found",
+                        "USER_NOT_FOUND"));
     }
 
     @PostMapping("/transfer")

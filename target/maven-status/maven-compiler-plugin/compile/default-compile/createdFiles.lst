@@ -48,6 +48,7 @@ com/paywallet/core/domain/model/Transaction.class
 com/paywallet/core/presentation/dto/WalletResponse$WalletResponseBuilder.class
 com/paywallet/core/domain/model/Wallet.class
 com/paywallet/core/presentation/exception/GlobalExceptionHandler.class
+com/paywallet/core/domain/exception/DuplicateResourceException.class
 com/paywallet/core/presentation/dto/LedgerEntryResponse$LedgerEntryResponseBuilder.class
 com/paywallet/core/presentation/dto/AddMoneyRequest.class
 com/paywallet/core/PayWalletApplication.class

@@ -37,7 +37,8 @@ public class WalletService {
         @Transactional
         public WalletResponse addMoney(UUID userId, BigDecimal amount, String description, UUID transactionId) {
                 if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-                        throw new IllegalArgumentException("Amount must be positive");
+                        throw new com.paywallet.core.domain.exception.InvalidOperationException(
+                                        "Amount must be positive", "INVALID_AMOUNT");
                 }
 
                 // 1. Lock Wallet
