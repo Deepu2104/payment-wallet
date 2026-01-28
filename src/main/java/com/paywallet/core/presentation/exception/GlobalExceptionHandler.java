@@ -1,6 +1,7 @@
 package com.paywallet.core.presentation.exception;
 
 import com.paywallet.core.domain.exception.*;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -65,6 +66,12 @@ public class GlobalExceptionHandler {
                         "VALIDATION_ERROR",
                         LocalDateTime.now().toString(),
                         errors));
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex) {
+        log.warn("Authentication failed: {}", ex.getMessage());
+        return buildResponse(HttpStatus.UNAUTHORIZED, "Invalid email or password", "AUTHENTICATION_FAILED");
     }
 
     @ExceptionHandler(Exception.class)

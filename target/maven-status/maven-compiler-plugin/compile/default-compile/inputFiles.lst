@@ -12,6 +12,7 @@
 /Users/deepaksingh/Desktop/working_projects/Payment-wallet/src/main/java/com/paywallet/core/application/service/WalletService.java
 /Users/deepaksingh/Desktop/working_projects/Payment-wallet/src/main/java/com/paywallet/core/infrastructure/security/TokenBlacklistService.java
 /Users/deepaksingh/Desktop/working_projects/Payment-wallet/src/main/java/com/paywallet/core/domain/exception/IdempotencyException.java
+/Users/deepaksingh/Desktop/working_projects/Payment-wallet/src/main/java/com/paywallet/core/infrastructure/config/WebConfig.java
 /Users/deepaksingh/Desktop/working_projects/Payment-wallet/src/main/java/com/paywallet/core/domain/repository/LedgerRepository.java
 /Users/deepaksingh/Desktop/working_projects/Payment-wallet/src/main/java/com/paywallet/core/infrastructure/security/RateLimitingFilter.java
 /Users/deepaksingh/Desktop/working_projects/Payment-wallet/src/main/java/com/paywallet/core/domain/exception/BusinessException.java

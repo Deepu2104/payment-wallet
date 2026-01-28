@@ -4,6 +4,7 @@ import com.paywallet.core.application.service.TransferService;
 import com.paywallet.core.infrastructure.messaging.event.TransactionInitiatedEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ public class FraudDetectionConsumer {
 
     private final TransferService transferService;
 
+    @EventListener
     @KafkaListener(topics = "transaction-initiated", groupId = "fraud-group")
     public void consumeTransactionInitiated(TransactionInitiatedEvent event) {
         log.info("Fraud check for txn: {}", event.getTransactionId());
