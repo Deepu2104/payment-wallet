@@ -58,13 +58,6 @@ logging:
     com.paywallet: DEBUG
 
 application:
-  security:
-    jwt:
-      # 256-bit secret key
-      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-      expiration: 900000 # 15 minutes
-      refresh-token:
-        expiration: 604800000 # 7 days
   features:
     redis:
       enabled: ${REDIS_ENABLED:true}

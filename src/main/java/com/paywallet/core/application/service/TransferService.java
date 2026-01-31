@@ -137,13 +137,19 @@ public class TransferService {
         walletRepository.save(senderWallet);
         walletRepository.save(receiverWallet);
 
+        // Fetch user names for descriptions
+        User senderUser = userRepository.findById(senderWallet.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("Sender user not found"));
+        User receiverUser = userRepository.findById(receiverWallet.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("Receiver user not found"));
+
         // Create Ledger Entries
         LedgerEntry debitEntry = LedgerEntry.builder()
                 .walletId(senderWallet.getId())
                 .transactionId(transaction.getId())
                 .type(LedgerEntry.LegacyType.DEBIT)
                 .amount(transaction.getAmount())
-                .description("Transfer to " + receiverWallet.getUserId()) // Should be User email ideally
+                .description("Transfer to " + receiverUser.getName())
                 .balanceAfter(senderWallet.getBalance())
                 .build();
 
@@ -152,7 +158,7 @@ public class TransferService {
                 .transactionId(transaction.getId())
                 .type(LedgerEntry.LegacyType.CREDIT)
                 .amount(transaction.getAmount())
-                .description("Transfer from " + senderWallet.getUserId())
+                .description("Transfer from " + senderUser.getName())
                 .balanceAfter(receiverWallet.getBalance())
                 .build();
 

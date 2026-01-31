@@ -6,7 +6,6 @@ com/paywallet/core/domain/model/Wallet$WalletBuilder.class
 com/paywallet/core/application/service/WalletService.class
 com/paywallet/core/domain/repository/UserRepository.class
 com/paywallet/core/domain/model/LedgerEntry$LedgerEntryBuilder.class
-com/paywallet/core/infrastructure/security/TokenBlacklistService.class
 com/paywallet/core/presentation/dto/LoginRequest$LoginRequestBuilder.class
 com/paywallet/core/infrastructure/config/OpenApiConfig.class
 com/paywallet/core/domain/model/LedgerEntry.class
@@ -20,6 +19,7 @@ com/paywallet/core/presentation/exception/GlobalExceptionHandler$ErrorResponse.c
 com/paywallet/core/domain/exception/ResourceNotFoundException.class
 com/paywallet/core/domain/exception/BusinessException.class
 com/paywallet/core/presentation/controller/TransferController.class
+com/paywallet/core/infrastructure/security/RedisTokenService.class
 com/paywallet/core/presentation/dto/AuthResponse.class
 com/paywallet/core/domain/model/BaseEntity.class
 com/paywallet/core/presentation/dto/TransferRequest.class
@@ -40,12 +40,11 @@ com/paywallet/core/domain/exception/InsufficientBalanceException.class
 com/paywallet/core/infrastructure/messaging/event/TransactionInitiatedEvent.class
 com/paywallet/core/presentation/controller/WalletController.class
 com/paywallet/core/presentation/dto/LoginRequest.class
-com/paywallet/core/infrastructure/security/JwtAuthenticationFilter.class
 com/paywallet/core/presentation/dto/AddMoneyRequest$AddMoneyRequestBuilder.class
 com/paywallet/core/infrastructure/config/WebConfig.class
 com/paywallet/core/domain/model/User$UserBuilder.class
+com/paywallet/core/infrastructure/security/TokenAuthenticationFilter.class
 com/paywallet/core/application/service/AuthService.class
-com/paywallet/core/infrastructure/security/JwtService.class
 com/paywallet/core/presentation/controller/AuthController.class
 com/paywallet/core/domain/model/Transaction.class
 com/paywallet/core/presentation/controller/RootController.class

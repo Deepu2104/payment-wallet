@@ -4,7 +4,7 @@ import com.paywallet.core.domain.model.User;
 import com.paywallet.core.domain.model.Wallet;
 import com.paywallet.core.domain.repository.UserRepository;
 import com.paywallet.core.domain.repository.WalletRepository;
-import com.paywallet.core.infrastructure.security.JwtService;
+import com.paywallet.core.infrastructure.security.RedisTokenService;
 import com.paywallet.core.presentation.dto.AuthResponse;
 import com.paywallet.core.presentation.dto.LoginRequest;
 import com.paywallet.core.presentation.dto.RegisterRequest;
@@ -12,14 +12,14 @@ import com.paywallet.core.domain.exception.DuplicateResourceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +28,10 @@ public class AuthService {
         private final UserRepository userRepository;
         private final WalletRepository walletRepository;
         private final PasswordEncoder passwordEncoder;
-        private final JwtService jwtService;
+        private final RedisTokenService redisTokenService;
         private final AuthenticationManager authenticationManager;
-        private final UserDetailsService userDetailsService;
-        private final com.paywallet.core.infrastructure.security.TokenBlacklistService tokenBlacklistService;
+
+        private static final Duration TOKEN_TTL = Duration.ofHours(24);
 
         @Transactional
         public AuthResponse register(RegisterRequest request) {
@@ -41,6 +41,7 @@ public class AuthService {
 
                 User user = User.builder()
                                 .email(request.getEmail())
+                                .name(request.getName())
                                 .passwordHash(passwordEncoder.encode(request.getPassword()))
                                 .roles(Set.of("ROLE_USER"))
                                 .isActive(true)
@@ -57,13 +58,11 @@ public class AuthService {
 
                 walletRepository.save(wallet);
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(savedUser.getEmail());
-                String jwtToken = jwtService.generateToken(userDetails);
-                String refreshToken = jwtService.generateRefreshToken(userDetails);
+                String token = UUID.randomUUID().toString();
+                redisTokenService.saveToken(token, savedUser.getEmail(), TOKEN_TTL);
 
                 return AuthResponse.builder()
-                                .accessToken(jwtToken)
-                                .refreshToken(refreshToken)
+                                .accessToken(token)
                                 .build();
         }
 
@@ -73,17 +72,19 @@ public class AuthService {
                                                 request.getEmail(),
                                                 request.getPassword()));
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(request.getEmail());
-                String jwtToken = jwtService.generateToken(userDetails);
-                String refreshToken = jwtService.generateRefreshToken(userDetails);
+                User user = userRepository.findByEmail(request.getEmail())
+                                .orElseThrow(() -> new com.paywallet.core.domain.exception.ResourceNotFoundException(
+                                                "User not found"));
+
+                String token = UUID.randomUUID().toString();
+                redisTokenService.saveToken(token, user.getEmail(), TOKEN_TTL);
 
                 return AuthResponse.builder()
-                                .accessToken(jwtToken)
-                                .refreshToken(refreshToken)
+                                .accessToken(token)
                                 .build();
         }
 
-        public void logout(String token) {
-                tokenBlacklistService.blacklistToken(token);
+        public void logout(String accessToken) {
+                redisTokenService.deleteToken(accessToken);
         }
 }

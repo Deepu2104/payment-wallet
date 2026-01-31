@@ -6,6 +6,7 @@ import { Lock, Mail, UserPlus, Loader2 } from 'lucide-react';
 import SuccessAnimation from '../components/SuccessAnimation';
 
 const Register: React.FC = () => {
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -20,7 +21,7 @@ const Register: React.FC = () => {
         setError('');
 
         try {
-            const response = await api.post('/auth/register', { email, password });
+            const response = await api.post('/auth/register', { name, email, password });
             login(response.data.accessToken);
             setSuccess(true);
             setTimeout(() => {
@@ -66,6 +67,21 @@ const Register: React.FC = () => {
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="mb-6">
+                        <label className="block text-sm font-medium text-gray-300 ml-1 mb-2">Full Name</label>
+                        <div className="relative">
+                            <UserPlus className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                            <input
+                                type="text"
+                                required
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                className="glass-input pl-12"
+                                placeholder="John Doe"
+                            />
+                        </div>
+                    </div>
+
                     <div className="mb-6">
                         <label className="block text-sm font-medium text-gray-300 ml-1 mb-2">Email</label>
                         <div className="relative">

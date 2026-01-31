@@ -18,6 +18,9 @@ public class User extends BaseEntity {
     private String email;
 
     @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false)
     private String passwordHash;
 
     @ElementCollection(fetch = FetchType.EAGER)

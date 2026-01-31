@@ -1,6 +1,6 @@
 package com.paywallet.core.infrastructure.config;
 
-import com.paywallet.core.infrastructure.security.JwtAuthenticationFilter;
+import com.paywallet.core.infrastructure.security.TokenAuthenticationFilter;
 import com.paywallet.core.infrastructure.security.RateLimitingFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -24,7 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final TokenAuthenticationFilter tokenAuthFilter;
     private final RateLimitingFilter rateLimitingFilter;
     private final UserDetailsService userDetailsService;
 
@@ -48,7 +48,7 @@ public class SecurityConfig {
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(rateLimitingFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(tokenAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

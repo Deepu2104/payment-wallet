@@ -10,11 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "Authentication response containing JWT tokens")
+@Schema(description = "Authentication response containing session token")
 public class AuthResponse {
-    @Schema(description = "JWT access token for API authorization", example = "eyJhbGciOiJIUzI1NiJ9...")
+    @Schema(description = "Opaque session token for API authorization", example = "550e8400-e29b-41d4-a716-446655440000")
     private String accessToken;
-
-    @Schema(description = "JWT refresh token to obtain new access tokens", example = "eyJhbGciOiJIUzI1NiJ9...")
-    private String refreshToken;
 }

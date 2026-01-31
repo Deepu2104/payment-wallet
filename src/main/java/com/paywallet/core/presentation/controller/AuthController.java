@@ -24,18 +24,18 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Creates a new user account and associated wallet")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthResponse> register(@jakarta.validation.Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/login")
-    @Operation(summary = "Authenticate user", description = "Returns JWT access and refresh tokens")
+    @Operation(summary = "Authenticate user", description = "Returns opaque session token")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 
     @PostMapping("/logout")
-    @Operation(summary = "Logout user", description = "Blacklists the current access token")
+    @Operation(summary = "Logout user", description = "Invalidates the current session token")
     public ResponseEntity<Void> logout(HttpServletRequest request) {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
