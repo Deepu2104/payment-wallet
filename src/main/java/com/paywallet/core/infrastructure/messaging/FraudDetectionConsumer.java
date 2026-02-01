@@ -18,7 +18,7 @@ public class FraudDetectionConsumer {
     private final TransferService transferService;
 
     @EventListener
-    @KafkaListener(topics = "transaction-initiated", groupId = "fraud-group")
+    @KafkaListener(topics = "transaction-initiated", groupId = "fraud-group", autoStartup = "${application.features.kafka.enabled:true}")
     public void consumeTransactionInitiated(TransactionInitiatedEvent event) {
         log.info("Fraud check for txn: {}", event.getTransactionId());
 
