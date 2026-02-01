@@ -8,9 +8,8 @@
 ---
 
 ## 1. Backend Setup (Koyeb)
-*(You have already done this)*
 *   **Koyeb URL:** e.g., `https://ethnic-lizbeth-payment-wallet-b8b58d61.koyeb.app`
-*   **Important:** This URL is for your API (Swagger), not the React app.
+*   **Important:** This URL is for the API (Swagger), not the React app.
 
 ---
 
@@ -47,3 +46,35 @@ Once Vercel finishes:
 ## Troubleshooting
 *   **CORS Error:** I have already updated the backend to allow connections from Vercel. Redeploy the backend if you haven't recently.
 *   **404 on API calls:** Ensure `VITE_API_URL` is set correctly in Vercel settings.
+
+---
+
+## 4. Future Scaling: Redis & Kafka 📈
+
+Currently, the app runs in **"Free Stack Mode"**:
+*   **Redis** is DISABLED (Tokens stored in RAM).
+*   **Kafka** is DISABLED (Events processed synchronously).
+
+To enable them heavily increases performance and reliability.
+
+### Step 1: Get Resources (Free Tier Recommended)
+*   **Redis:** [Upstash Redis](https://upstash.com) (Excellent serverless Redis).
+*   **Kafka:** [Upstash Kafka](https://upstash.com) or [Confluent Cloud](https://confluent.io).
+
+### Step 2: Update Koyeb Environment Variables
+Add these variables to your running Koyeb service to automatically enable the features.
+
+| Key | Value Template |
+| :--- | :--- |
+| **`REDIS_ENABLED`** | `true` |
+| **`REDIS_HOST`** | `your-upstash-redis.com` |
+| **`REDIS_PORT`** | `6379` |
+| **`REDIS_PASSWORD`** | `your_redis_password` |
+| | |
+| **`KAFKA_ENABLED`** | `true` |
+| **`KAFKA_BOOTSTRAP_SERVERS`** | `your-kafka-broker:9092` |
+| **`KAFKA_SECURITY_PROTOCOL`** | `SASL_SSL` (usually for cloud) |
+| **`KAFKA_SASL_MECHANISM`** | `SCRAM-SHA-256` (check provider) |
+| **`KAFKA_SASL_JAAS_CONFIG`** | `org.apache.kafka.common.security.scram.ScramLoginModule required username="<USER>" password="<PASS>";` |
+
+**No code changes are needed!** The app detects `ENABLED=true` and switches from RAM to the real services automatically.
