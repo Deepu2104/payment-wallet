@@ -31,6 +31,12 @@ public class RateLimitingFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        // Allow OPTIONS requests to bypass rate limiting (critical for CORS preflight)
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String clientIp = request.getRemoteAddr();
         String key = "rate_limit:" + clientIp;
         Long count;
