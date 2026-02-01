@@ -1,7 +1,21 @@
 import axios from 'axios';
 
+// Helper to strip trailing slash
+const cleanUrl = (url: string) => url.replace(/\/+$/, '');
+
+const getBaseUrl = () => {
+    const envUrl = import.meta.env.VITE_API_URL;
+    if (envUrl) {
+        return cleanUrl(envUrl);
+    }
+    return '/api/v1';
+};
+
+const baseURL = getBaseUrl();
+console.log('🔌 API Base URL:', baseURL);
+
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || '/api/v1',
+    baseURL,
     headers: {
         'Content-Type': 'application/json',
     },
