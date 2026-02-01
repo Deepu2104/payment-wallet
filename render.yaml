@@ -1,0 +1,24 @@
+services:
+  # 1. The Web Service (Spring Boot + React)
+  - type: web
+    name: paywallet-service
+    runtime: docker
+    region: ohio
+    plan: free
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: paywallet-db
+          property: connectionString
+      - key: REDIS_ENABLED
+        value: "false"
+      - key: KAFKA_ENABLED
+        value: "false"
+
+databases:
+  # 2. The PostgreSQL Database
+  - name: paywallet-db
+    databaseName: paywallet
+    user: admin
+    plan: free
+    region: ohio

@@ -1,21 +1,19 @@
-# Simplified Deployment: One-Click to Render
+## 1. One-Click Deployment (Recommended)
+This project includes a `render.yaml` Blueprint.
 
-This guide gets your whole application live in minutes by bundling everything into a single service. No external setup for Redis or Kafka is required.
+1. Go to [Render Dashboard](https://dashboard.render.com).
+2. Click **New +** -> **Blueprint**.
+3. Connect this repository.
+4. Render will automatically detect the `render.yaml` and propose creating:
+   - `paywallet-db` (PostgreSQL)
+   - `paywallet-service` (Web Service)
+5. Click **Apply**. 
 
-## 1. Database Setup (Render)
-1. Go to [Render](https://render.com/) and create a **New** -> **PostgreSQL**.
-2. Name it `paywallet-db`. 
-3. After creation, copy the **Internal Database URL**.
+That's it! Render will build the Docker image (Frontend + Backend) and deploy it.
 
-## 2. Web Service Setup (Render)
-1. Click **New** -> **Web Service**.
-2. Connect your GitHub repository.
-3. Select **Docker** as the Runtime.
-4. Add the following **Environment Variables**:
-   - `SPRING_DATASOURCE_URL`: (Paste your Render Internal Database URL)
-   - `REDIS_ENABLED`: `false` (Enables built-in demo mode)
-   - `KAFKA_ENABLED`: `false` (Enables built-in demo mode)
-   - `JWT_SECRET_KEY`: (A random 64-character hex string)
-5. Click **Deploy**.
+## 2. Configuration Notes
+By default, we run in "Demo Mode" to avoid needing external Redis/Kafka services (which cost money).
+- `REDIS_ENABLED`: `false` (Uses in-memory fallback)
+- `KAFKA_ENABLED`: `false` (Uses direct method calls)
 
-**That's it!** Your app will be live at the Render URL provided (e.g., `https://paywallet.onrender.com`).
+To enable these features later, simply spin up Redis/Kafka services and set these variables to `true`.
