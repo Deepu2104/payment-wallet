@@ -57,6 +57,6 @@ logging:
 application:
   features:
     redis:
-      enabled: ${REDIS_ENABLED:true}
+      enabled: ${REDIS_ENABLED:false}
     kafka:
-      enabled: ${KAFKA_ENABLED:true}
+      enabled: ${KAFKA_ENABLED:false}

@@ -11,10 +11,11 @@ This guide explains how to deploy the **Payment Wallet** to a robust, free-tier 
 ## 1. Database Setup (Neon)
 1.  Go to **[Neon.tech](https://neon.tech)** and sign up.
 2.  Create a new **Project**.
-3.  Copy the **Connection String** from the dashboard. It will look like:
+3.  Copy the **Connection String** from the dashboard. It typically looks like:
     ```
-    postgres://neondb_owner:*******@ep-shiny-....aws.neon.tech/paywallet?sslmode=require
+    postgres://neondb_owner:*******@ep-shiny-cloud-123.aws.neon.tech/neondb?sslmode=require
     ```
+
 ---
 
 ## 2. Application Setup (Koyeb)
@@ -31,22 +32,34 @@ This guide explains how to deploy the **Payment Wallet** to a robust, free-tier 
 
     | Key | Value | Note |
     | :--- | :--- | :--- |
-    | `SPRING_DATASOURCE_URL` | `jdbc:postgresql://<NEON_HOST>/<DB_NAME>?sslmode=require` | **See instructions below** |
-    | `SPRING_DATASOURCE_USERNAME` | `<NEON_USER>` | From Neon Dashboard |
+    | `SPRING_DATASOURCE_URL` | *See detailed construction below* | **MUST FOLLOW FORMAT PRECISELY** |
+    | `SPRING_DATASOURCE_USERNAME` | `<NEON_USER>` | From Neon Dashboard (e.g. `neondb_owner`) |
     | `SPRING_DATASOURCE_PASSWORD` | `<NEON_PASSWORD>` | From Neon Dashboard |
     | `SPRING_PROFILES_ACTIVE` | `prod` | |
-    | `REDIS_ENABLED` | `false` | Disables Redis (uses local memory) |
-    | `KAFKA_ENABLED` | `false` | Disables Kafka (uses local memory) |
+    | `REDIS_ENABLED` | `false` | Defaults to false, but good to be explicit |
+    | `KAFKA_ENABLED` | `false` | Defaults to false, but good to be explicit |
 
-    ### ⚠️ How to construct `SPRING_DATASOURCE_URL`:
-    Neon gives you: `postgres://user:pass@ep-shiny-cloud.aws.neon.tech/neondb`
+    ### ⚠️ How to construct `SPRING_DATASOURCE_URL` for Neon:
+    The JDBC driver for Neon often requires the **Endpoint ID** to be passed explicitly if SNI fails.
     
-    You must convert it to Java format:
-    `jdbc:postgresql://ep-shiny-cloud.aws.neon.tech/neondb?sslmode=require`
+    **Format:**
+    ```
+    jdbc:postgresql://<HOST>/<DB>?sslmode=require&options=endpoint%3D<ENDPOINT_ID>
+    ```
 
-    *   **Host:** `ep-shiny-cloud.aws.neon.tech` (The part after `@`)
-    *   **Database:** `neondb` (The part after `/`)
-    *   **Suffix:** `?sslmode=require` (Required for Neon)
+    **Example:**
+    If Neon gives you: `postgres://neondb_owner:pass@ep-shiny-cloud-123.aws.neon.tech/neondb?sslmode=require`
+
+    *   **Host**: `ep-shiny-cloud-123.aws.neon.tech`
+    *   **Database**: `neondb`
+    *   **Endpoint ID**: `ep-shiny-cloud-123` (The first part of the host before `.aws.neon.tech`)
+
+    **Your Connection String should be:**
+    ```
+    jdbc:postgresql://ep-shiny-cloud-123.aws.neon.tech/neondb?sslmode=require&options=endpoint%3Dep-shiny-cloud-123
+    ```
+
+    > **Note:** The `options=endpoint%3D...` part fixes the "Endpoint ID is not specified" error.
 
 6.  **Expose Port:**
     *   Port: `8080`
@@ -57,10 +70,10 @@ This guide explains how to deploy the **Payment Wallet** to a robust, free-tier 
 ---
 
 ## 3. Verification
-Once deployed, click the **Public URL** provided by Koyeb (e.g., `https://payment-wallet-xyz.koyeb.app`).
-*   The Swagger UI should be available at: `/swagger-ui.html`
-*   The Health Check: `/actuator/health`
+Once deployed, click the **Public URL** provided by Koyeb.
+*   **Health Check:** `/actuator/health` -> Should return `{"status":"UP"}`
+*   **Swagger UI:** `/swagger-ui.html`
 
 ## Troubleshooting
-*   **Database Connection Failed:** Double-check the `SPRING_DATASOURCE_URL` format. It MUST start with `jdbc:postgresql://` and end with `?sslmode=require`.
-*   **Build Failures:** Check the "Build Logs" tab in Koyeb for Maven errors.
+*   **"Endpoint ID is not specified":** You missed the `&options=endpoint%3D<id>` part in the URL.
+*   **"Kafka Connection Refused":** Ensure `KAFKA_ENABLED` is set to `false` (it is false by default now, but check your env vars).
